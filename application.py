@@ -17,7 +17,6 @@ def index():
 
     conn = pymysql.connect(
         host='database-1.cn1wgl48ybn6.eu-west-2.rds.amazonaws.com',
-        port='3306',
         user='admin',
         password='Hollywarner10',
         db='EUcustdb',
@@ -58,7 +57,6 @@ def Authenticate():
 
     conn = pymysql.connect(
         host='globalauroradb-cluster-1.cluster-ro-cn1wgl48ybn6.eu-west-2.rds.amazonaws.com',
-        port='3306',
         user='admin',
         password='Hollywarner10',
         db='inventorydb',
