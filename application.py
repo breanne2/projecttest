@@ -2,8 +2,8 @@ from flask import Flask
 from flask import Flask, render_template
 from flaskext.mysql import MySQL
 from flask import Flask,request
-
-mysql = MySQL()
+import pymysql
+#mysql = MySQL()
 application = Flask(__name__)
 
 
@@ -15,16 +15,27 @@ def index():
     #application.config['RDS_USERNAME'] = 'admin'
     #application.config['RDS_PASSWORD'] = 'Hollywarner10'
 
-    application.config['MYSQL_DATABASE_USER'] = 'admin'
-    application.config['MYSQL_DATABASE_PASSWORD'] = 'Hollywarner10'
-    application.config['MYSQL_DATABASE_DB'] = 'EUcustdb'
-    application.config['MYSQL_DATABASE_HOST'] = 'database-1.cn1wgl48ybn6.eu-west-2.rds.amazonaws.com'
-    application.config['MYSQL_DATABASE_ROOT'] = '3306'
+    conn = pymysql.connect(
+        host='database-1.cn1wgl48ybn6.eu-west-2.rds.amazonaws.com',
+        port='3306',
+        user='admin',
+        password='Hollywarner10',
+        db='EUcustdb',
+    )
 
-    mysql.init_app(application)
+    #application.config['MYSQL_DATABASE_USER'] = 'admin'
+    #application.config['MYSQL_DATABASE_PASSWORD'] = 'Hollywarner10'
+    #application.config['MYSQL_DATABASE_DB'] = 'EUcustdb'
+    #application.config['MYSQL_DATABASE_HOST'] = 'database-1.cn1wgl48ybn6.eu-west-2.rds.amazonaws.com'
+    #application.config['MYSQL_DATABASE_ROOT'] = '3306'
 
-    cursor = mysql.connect().cursor()
+    #mysql.init_app(application)
+
+    #cursor = mysql.connect().cursor()
+    cursor = conn.cursor()
+    #for testing execution code
     #cursor.execute('SELECT * FROM eu_cust_data')
+    #for the one on cloud
     cursor.execute('SELECT * FROM EU_cust_data')
     data = cursor.fetchall()
     return render_template('index.html', output_data=data)
@@ -32,10 +43,10 @@ def index():
 @application.route("/Authenticate")
 def Authenticate():
 
-    application.config['MYSQL_DATABASE_USER'] = 'root'
-    application.config['MYSQL_DATABASE_PASSWORD'] = 'Hollywarner10'
-    application.config['MYSQL_DATABASE_DB'] = 'inventorydb'
-    application.config['MYSQL_DATABASE_HOST'] = 'localhost'
+    #application.config['MYSQL_DATABASE_USER'] = 'root'
+    #application.config['MYSQL_DATABASE_PASSWORD'] = 'Hollywarner10'
+    #application.config['MYSQL_DATABASE_DB'] = 'inventorydb'
+    #application.config['MYSQL_DATABASE_HOST'] = 'localhost'
 
     #application.config['RDS_HOSTNAME'] = 'globalauroradb-cluster-1.cluster-ro-cn1wgl48ybn6.eu-west-2.rds.amazonaws.com'
     #application.config['RDS_PORT'] = '3306'
@@ -43,11 +54,17 @@ def Authenticate():
     #application.config['RDS_USERNAME'] = 'admin'
     #application.config['RDS_PASSWORD'] = 'Hollywarner10'
 
-    mysql.init_app(application)
+    #mysql.init_app(application)
 
-    cursor = mysql.connect().cursor()
-    #Productname = request.args.get('productname')
-    cursor = mysql.connect().cursor()
+    conn = pymysql.connect(
+        host='globalauroradb-cluster-1.cluster-ro-cn1wgl48ybn6.eu-west-2.rds.amazonaws.com',
+        port='3306',
+        user='admin',
+        password='Hollywarner10',
+        db='inventorydb',
+    )
+    cursor = conn.cursor()
+    #cursor = mysql.connect().cursor()
     cursor.execute('SELECT * FROM items')
     data = cursor.fetchall()
     if data is None:
